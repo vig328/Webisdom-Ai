@@ -18,10 +18,8 @@ import NotFound from "./pages/NotFound";
 import ZigZagIndustries from "./pages/ZigZagIndustries";
 import BlogDetail from "./pages/BlogDetailsPage";
 import IndustryDetail from "./pages/IndustryDetail";
-
-// ✅ YAHAN DONO IMPORT KAREIN
-import FloatingChatbot from "./pages/FloatingChatBox"; // Wapas aa gaya
-import FloatingContactBtn from "./components/FloatingContactBtn"; // Naya wala
+import FloatingChatbot from "./pages/FloatingChatBox";
+import FloatingContactBtn from "./components/FloatingContactBtn";
 
 const queryClient = new QueryClient();
 
@@ -40,31 +38,24 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
-        
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/services" element={<Services />} />
           <Route path="/industries" element={<Industries />} />
-          <Route path="/industries/:id" element={<ZigZagIndustries />} />
+          {/* Main Industry Detail Route */}
+          <Route path="/industry/:id" element={<IndustryDetail />} />
+          
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/blog-detail" element={<BlogDetail />} />
-          <Route path="/industry/:id" element={<IndustryDetail />} />
-          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
 
-        {/* ✅ STICKY COMPONENTS (DONO YAHAN HAIN) */}
-        
-        {/* 1. Side Button (Right Center) */}
         <FloatingContactBtn /> 
-
-        {/* 2. Chatbot (Bottom Right) */}
         <FloatingChatbot /> 
-        
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
