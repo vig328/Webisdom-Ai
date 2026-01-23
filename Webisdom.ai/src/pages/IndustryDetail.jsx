@@ -1,227 +1,285 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { industries } from "@/data/industriesData"; 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { products } from "@/data/productsData"; 
+import { Card, CardContent } from "@/components/ui/card";
 import { 
-  Hotel, Heart, Building2, ShoppingBag, GraduationCap, 
-  Home, Factory, Truck, Gavel, Cpu, Wheat, TrendingUp, 
-  Sparkles, ArrowRight, CheckCircle2, LayoutGrid
+  CheckCircle, ArrowDown, HelpCircle, 
+  Layers, Zap, ShieldCheck, Target, ExternalLink 
 } from "lucide-react";
-
-// --- CONFIGURATION (Updated Colors for Light Theme) ---
-const industryConfig = {
-  hospitality: { 
-    title: "Hospitality", 
-    tagline: "Redefining Guest Experiences",
-    desc: "Automate concierge, optimize room inventory, and personalize guest stays with AI.",
-    icon: Hotel, 
-    color: "text-blue-600",
-    bg: "bg-blue-100",
-    stats: ["30% Less OpEx", "5-Star Ratings", "24/7 Service"]
-  },
-  fintech: { 
-    title: "Fintech & Banking", 
-    tagline: "Secure, Smart Financial Operations",
-    desc: "Detect fraud in real-time, automate loan approvals, and ensure 100% compliance.",
-    icon: Building2, 
-    color: "text-purple-600",
-    bg: "bg-purple-100",
-    stats: ["99% Fraud Block", "Instant KYC", "Auto-Audit"]
-  },
-  healthcare: { 
-    title: "Healthcare", 
-    tagline: "AI-Powered Patient Care",
-    desc: "Accelerate diagnosis, automate patient triage, and revolutionize drug discovery.",
-    icon: Heart, 
-    color: "text-rose-600",
-    bg: "bg-rose-100",
-    stats: ["99% Accuracy", "Faster Triage", "HIPAA Safe"]
-  },
-  tech: { 
-    title: "Technology", 
-    tagline: "Build the Future, Faster",
-    desc: "Autonomous coding agents, secure cloud migration, and next-gen developer tools.",
-    icon: Cpu, 
-    color: "text-slate-700",
-    bg: "bg-slate-200",
-    stats: ["10x Coding Speed", "Zero Tech Debt", "Auto-Scale"]
-  },
-  manufacturing: { 
-    title: "Manufacturing", 
-    tagline: "Industry 4.0 Realized",
-    desc: "Predict machine failures and detect defects with computer vision.",
-    icon: Factory, 
-    color: "text-orange-600",
-    bg: "bg-orange-100",
-    stats: ["Zero Downtime", "100% QC", "Safety First"]
-  },
-  retail: { 
-    title: "Retail & E-commerce", 
-    tagline: "Personalization at Scale",
-    desc: "Optimize store layouts, generate ad creatives, and predict trends.",
-    icon: ShoppingBag, 
-    color: "text-pink-600",
-    bg: "bg-pink-100",
-    stats: ["Higher AOV", "Better Conversion", "Auto-Marketing"]
-  },
-  education: { title: "Education", tagline: "Personalized Learning", desc: "AI tutors and grading.", icon: GraduationCap, color: "text-yellow-600", bg: "bg-yellow-100", stats: ["24/7 Tutoring", "Fair Grading", "Student Success"] },
-  agriculture: { title: "AgriTech", tagline: "Smart Farming", desc: "Precision irrigation.", icon: Wheat, color: "text-green-600", bg: "bg-green-100", stats: ["Higher Yield", "Less Water", "Crop Health"] },
-  logistics: { title: "Logistics", tagline: "Efficient Supply Chains", desc: "Route optimization.", icon: Truck, color: "text-cyan-600", bg: "bg-cyan-100", stats: ["On-Time Delivery", "Fuel Saving", "Real-Time"] },
-  legal: { title: "LegalTech", tagline: "Automated Workflows", desc: "Contract review.", icon: Gavel, color: "text-stone-600", bg: "bg-stone-200", stats: ["Risk Mitigation", "Fast Review", "Compliance"] },
-  "real-estate": { title: "Real Estate", tagline: "Data-Driven PropTech", desc: "Valuation engines.", icon: Home, color: "text-teal-600", bg: "bg-teal-100", stats: ["Accurate Pricing", "Faster Sales", "Market Insight"] },
-  revenue: { title: "Revenue Mgmt", tagline: "Maximize Profitability", desc: "Dynamic pricing.", icon: TrendingUp, color: "text-emerald-600", bg: "bg-emerald-100", stats: ["Higher RevPAR", "Smart Pricing", "Competitor Intel"] },
-  coworking: { title: "Coworking", tagline: "Automated Workspaces", desc: "Desk booking.", icon: Sparkles, color: "text-violet-600", bg: "bg-violet-100", stats: ["Better Occupancy", "Happy Members", "Auto-Billing"] },
-};
 
 const IndustryDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const config = industryConfig[id] || { 
-    title: id?.charAt(0).toUpperCase() + id?.slice(1), 
-    tagline: "Industry Solutions",
-    desc: "Explore our specialized AI products.",
-    icon: LayoutGrid, 
-    color: "text-slate-700",
-    bg: "bg-slate-100",
-    stats: ["Efficiency", "Innovation", "Growth"]
-  };
-  
-  const Icon = config.icon;
-  const industryProducts = products.filter((p) => p.industry?.toLowerCase() === id?.toLowerCase());
+  // Find industry and handle case sensitivity
+  const data = industries.find((item) => item.id.toLowerCase() === id?.toLowerCase());
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
 
+  if (!data) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+        <h2 className="text-3xl font-bold mb-4 text-gray-800">Industry Architecture Not Found</h2>
+        <Button onClick={() => navigate("/industries")}>Return to Ecosystem</Button>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-white font-sans">
+    <div className="min-h-screen bg-white">
       <Header />
       
-      {/* ================= HERO SECTION (Light Theme & Visible Text) ================= */}
-      <section className="relative pt-40 pb-20 overflow-hidden bg-white">
+      {/* ================= HERO SECTION ================= */}
+      <section className="relative pt-32 pb-20 overflow-hidden bg-slate-950 text-white">
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+            <img src={data.image} className="w-full h-full object-cover blur-3xl scale-110" alt="" />
+        </div>
         
-        {/* Soft Color Blob Background */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-slate-50 to-white -z-10"></div>
-        <div className={`absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl opacity-20 ${config.bg.replace('bg-', 'bg-')}`}></div>
-        <div className="absolute top-[10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-blue-100 mix-blend-multiply filter blur-3xl opacity-30"></div>
+        <div className="container mx-auto px-4 relative z-10 text-center max-w-4xl">
+            <div className="flex justify-center gap-2 mb-6">
+               <Badge variant="outline" className="px-4 py-1 text-sm border-white/20 text-white bg-white/10 backdrop-blur-md">
+                 {data.category || "Enterprise Intelligence"}
+               </Badge>
+               <Badge variant="secondary" className="px-4 py-1 text-sm bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                 {data.status}
+               </Badge>
+            </div>
 
-        <div className="container mx-auto px-4 relative z-10 text-center">
-           
-           {/* Icon Badge */}
-           <div className={`inline-flex p-4 rounded-2xl ${config.bg} mb-8 shadow-sm animate-in zoom-in duration-500`}>
-              <Icon className={`w-12 h-12 ${config.color}`} />
-           </div>
-           
-           {/* Main Heading (Dark Text) */}
-           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-slate-900">
-             {config.title}
-           </h1>
-           
-           {/* Subtitle (Grey Text) */}
-           <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto font-medium leading-relaxed mb-10">
-             {config.tagline}
-           </p>
-
-           {/* Stats Pills (Bordered) */}
-           <div className="flex flex-wrap justify-center gap-4">
-              {config.stats.map((stat, i) => (
-                <div key={i} className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-slate-200 text-slate-700 shadow-sm text-sm font-semibold tracking-wide">
-                   <CheckCircle2 className={`w-4 h-4 ${config.color}`} /> {stat}
-                </div>
-              ))}
-           </div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight leading-tight uppercase italic">
+              {data.title}
+            </h1>
+            <p className="text-xl md:text-2xl text-blue-200 mb-6 font-light italic">
+              {data.subtitle}
+            </p>
+            <p className="text-lg text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
+              {data.description}
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="bg-white text-slate-900 hover:bg-gray-100 rounded-full px-8 font-semibold" asChild>
+                <a href="#deep-dive">
+                   <ArrowDown className="mr-2 w-4 h-4"/> Technical Architecture
+                </a>
+              </Button>
+              {data.url && (
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 bg-transparent"
+                  asChild
+                >
+                  <a href={data.url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="mr-2 w-4 h-4"/> Live Platform
+                  </a>
+                </Button>
+              )}
+            </div>
         </div>
       </section>
 
-      {/* ================= DESCRIPTION ================= */}
-      <section className="py-12 bg-white">
-         <div className="container mx-auto px-4 text-center">
-            <p className="text-2xl text-slate-800 max-w-4xl mx-auto font-light leading-relaxed border-l-4 border-slate-200 pl-6 italic">
-              "{config.desc}"
-            </p>
-         </div>
-      </section>
-
-      {/* ================= PRODUCT GRID ================= */}
-      <section className="pb-32 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="flex items-center justify-between mb-12 border-b border-slate-100 pb-4">
-             <h2 className="text-3xl font-bold text-slate-900">Tailored Solutions</h2>
-             <Button variant="ghost" onClick={() => navigate('/industries')} className="hidden sm:flex text-slate-500 hover:text-slate-900">
-                View All Industries <ArrowRight className="ml-2 w-4 h-4"/>
-             </Button>
+      {/* ================= STATS BAR ================= */}
+      {data.stats && (
+        <section className="bg-blue-600 py-10 text-white border-b border-blue-700">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-blue-500/50">
+              {data.stats.map((stat, i) => (
+                <div key={i} className="pt-4 md:pt-0">
+                  <p className="text-4xl font-black mb-1">{stat.split(" ")[0]}</p>
+                  <p className="text-blue-100 text-sm uppercase tracking-widest opacity-80">
+                    {stat.substring(stat.indexOf(" ") + 1)}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
+        </section>
+      )}
 
-          {industryProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {industryProducts.map((product) => (
-                <div 
-                  key={product.id} 
-                  className="group bg-white rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden"
-                >
-                  {/* Image */}
-                  <div className="h-56 overflow-hidden relative bg-slate-50">
-                    <img 
-                      src={product.image} 
-                      alt={product.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                      loading="lazy"
-                    />
-                    <Badge className="absolute top-4 right-4 bg-white/90 text-slate-900 shadow-sm backdrop-blur-md">
-                      {product.status}
-                    </Badge>
-                  </div>
+      {/* ================= MAIN CONTENT ================= */}
+      <section id="deep-dive" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4 max-w-7xl">
+            <div className="grid lg:grid-cols-3 gap-12">
+                
+                {/* --- LEFT COLUMN --- */}
+                <div className="lg:col-span-2 space-y-16">
+                    
+                    {/* 1. Deep Dive Description */}
+                    <div>
+                        <h2 className="text-3xl font-bold text-slate-900 mb-6">System Overview</h2>
+                        <div className="text-lg text-gray-700 leading-relaxed whitespace-pre-line mb-8">
+                            {data.longDescription}
+                        </div>
 
-                  {/* Body */}
-                  <div className="p-8 flex flex-col flex-grow">
-                    <div className="mb-4">
-                      <h3 className="text-2xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">
-                        {product.title}
-                      </h3>
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                        {product.subtitle}
-                      </p>
+                        <div className="bg-white p-8 rounded-2xl border shadow-sm">
+                            <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                <Zap className="w-5 h-5 text-yellow-500 fill-yellow-500"/> Core Capabilities
+                            </h3>
+                            <ul className="grid sm:grid-cols-2 gap-y-4 gap-x-8">
+                                {data.features?.map((f, i) => (
+                                    <li key={i} className="flex items-start gap-3 text-gray-700">
+                                        <CheckCircle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                                        <span className="font-medium">{f}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
-                    <p className="text-slate-600 leading-relaxed mb-6 line-clamp-3 flex-grow text-sm">
-                      {product.description}
-                    </p>
+                    {/* 2. Strategic Benefits */}
+                    {data.benefits && (
+                      <div>
+                          <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                              <ShieldCheck className="w-6 h-6 text-green-600"/> Strategic Benefits
+                          </h3>
+                          <div className="grid sm:grid-cols-2 gap-4">
+                              {data.benefits.map((benefit, i) => (
+                                  <Card key={i} className="bg-white border-l-4 border-l-green-500 shadow-sm hover:shadow-md transition-shadow">
+                                      <CardContent className="p-5 flex items-center gap-3">
+                                          <p className="text-gray-800 font-medium">{benefit}</p>
+                                      </CardContent>
+                                  </Card>
+                              ))}
+                          </div>
+                      </div>
+                    )}
 
-                    <Button 
-                      onClick={() => navigate(`/products/${product.id}`)}
-                      className="w-full bg-slate-50 text-slate-900 hover:bg-slate-900 hover:text-white border border-slate-200 transition-all py-6"
-                    >
-                      Explore Details <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
+                    {/* 3. Use Cases */}
+                    {data.useCases && (
+                      <div>
+                          <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                              <Target className="w-6 h-6 text-blue-600"/> Sector Applications
+                          </h3>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {data.useCases.map((useCase, i) => (
+                                  <div key={i} className="bg-slate-100 p-4 rounded-xl text-center border border-slate-200">
+                                      <span className="text-slate-700 font-semibold">{useCase}</span>
+                                  </div>
+                              ))}
+                          </div>
+                      </div>
+                    )}
+                </div>
+
+                {/* --- RIGHT COLUMN (Sticky Sidebar) --- */}
+                <div className="lg:col-span-1">
+                    <div className="space-y-8 sticky top-24">
+                        
+                        {/* Consultation Card */}
+                        <Card className="shadow-lg border-t-4 border-t-blue-600 overflow-hidden">
+                            <CardContent className="p-6 text-center">
+                                <h3 className="font-bold text-xl mb-2">Enterprise Deployment</h3>
+                                <p className="text-sm text-gray-500 mb-6">Schedule a technical walkthrough with our infrastructure architects.</p>
+                                <Button className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg" onClick={() => navigate('/contact')}>
+                                    Talk to Experts
+                                </Button>
+                            </CardContent>
+                        </Card>
+
+                        {/* Tech Stack */}
+                        <div className="bg-white p-6 rounded-xl border shadow-sm">
+                            <h3 className="font-bold text-lg mb-6 flex items-center gap-2 border-b pb-4">
+                                <Layers className="w-5 h-5 text-gray-500"/> Tech Stack
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                                {data.technologies?.map((tech) => (
+                                    <Badge key={tech} variant="secondary" className="px-3 py-1.5 bg-slate-100 text-slate-700 font-mono text-xs">
+                                        {tech}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Integrations */}
+                        {data.integrations && (
+                            <div className="bg-white p-6 rounded-xl border shadow-sm">
+                                <h3 className="font-bold text-lg mb-4 flex items-center gap-2 border-b pb-4">
+                                    <Zap className="w-5 h-5 text-gray-500"/> Ecosystem
+                                </h3>
+                                <div className="space-y-3">
+                                    {data.integrations.map((tool) => (
+                                        <div key={tool} className="flex items-center gap-3 text-gray-600 bg-gray-50 p-2 rounded-lg text-sm border border-gray-100">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                                            {tool}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      {/* ================= TESTIMONIALS SECTION ================= */}
+      {data.testimonials && data.testimonials.length > 0 && (
+        <section className="py-24 bg-slate-900 text-white overflow-hidden relative">
+          <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="flex flex-col items-center text-center mb-16">
+              <Badge className="mb-4 bg-blue-600 hover:bg-blue-700 border-none px-6 py-1 uppercase tracking-widest text-[10px]">
+                Deployment Feedback
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold">What Clients Say</h2>
+            </div>
+
+            <div className="max-w-4xl mx-auto">
+              {data.testimonials.map((testimonial, i) => (
+                <div key={i} className="relative bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-14 rounded-[2rem] shadow-2xl">
+                  
+                  {/* FIXED: Removed Quote Icon and manual double quotes to clean up the UI */}
+                  <blockquote className="text-xl md:text-3xl font-light leading-relaxed mb-10 italic relative z-10 text-center">
+                    {testimonial.quote}
+                  </blockquote>
+
+                  <div className="flex items-center justify-center gap-5 border-t border-white/10 pt-8">
+                    <div className="relative">
+                      <img 
+                        src={testimonial.avatar} 
+                        alt={testimonial.name} 
+                        className="w-16 h-16 rounded-full object-cover border-2 border-blue-500/50 shadow-lg"
+                      />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-bold text-xl leading-none mb-1 text-white">{testimonial.name}</p>
+                      <p className="text-blue-400 text-sm font-medium tracking-wide">{testimonial.role}</p>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="text-center py-24 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
-              <Sparkles className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-slate-400">No Solutions Listed</h3>
-              <p className="text-slate-500 mt-2">Check back later for updates.</p>
-            </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
-      {/* CTA */}
-      <section className="py-20 bg-slate-50">
-         <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4 text-slate-900">Need something else?</h2>
-            <p className="text-slate-500 mb-8">Our AI Lab builds custom models for unique challenges.</p>
-            <Button size="lg" className="rounded-full px-8 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate('/contact')}>
-                Talk to Experts
-            </Button>
-         </div>
-      </section>
+      {/* ================= FAQ SECTION ================= */}
+      {data.faqs && (
+        <section className="py-20 bg-white border-t">
+            <div className="container mx-auto px-4 max-w-4xl">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl font-bold mb-4">Technical FAQ</h2>
+                    <p className="text-gray-500">Deep-dive insights into the {data.title} infrastructure and integration protocols.</p>
+                </div>
+                <div className="grid gap-6">
+                    {data.faqs.map((faq, i) => (
+                        <div key={i} className="bg-gray-50 p-8 rounded-2xl border border-gray-200 hover:border-blue-200 hover:shadow-md transition-all group">
+                            <h4 className="font-bold text-xl text-slate-900 flex items-start gap-4">
+                                <HelpCircle className="w-6 h-6 text-blue-600 shrink-0 mt-1 group-hover:scale-110 transition-transform"/> {faq.q}
+                            </h4>
+                            <p className="text-gray-600 mt-4 ml-10 text-lg leading-relaxed">{faq.a}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+      )}
 
       <Footer />
     </div>
