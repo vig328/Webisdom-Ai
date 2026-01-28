@@ -16,6 +16,7 @@ import {
   Zap,
   Target,
   Sparkles,
+  Badge,
 } from "lucide-react";
 import { AuditRequestDialog } from "@/components/forms/AuditRequestDialog";
 import { DemoRequestDialog } from "@/components/forms/DemoRequestDialog";
@@ -171,18 +172,25 @@ const Services = () => {
     <div className="min-h-screen">
       <Header />
       <main className="pt-16" id="ai-solutions">
-        {/* Hero Section */}
-        <section className="py-24 bg-gradient-to-br from-primary/10 to-accent/10">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-                Enterprise <span className="text-gradient">AI Solutions</span>
-              </h1>
-              <p className="text-xl text-muted-foreground">
-                From intelligent auditing to custom AI development—empowering
-                businesses with cutting-edge artificial intelligence.
-              </p>
-            </div>
+        {/* Hero Section - Matched to About/Industries Aesthetic */}
+        <section className="pt-40 pb-24 bg-slate-950 text-white text-center relative overflow-hidden">
+          {/* The "Magic" Radial Glow Layer */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/30 via-slate-950 to-slate-950 -z-10"></div>
+  
+          <div className="relative z-10 container mx-auto px-4 max-w-4xl">
+           {/* Industry-standard badge */}
+           <Badge variant="outline" className="mb-6 border-white/20 text-blue-200 uppercase tracking-wider py-2 px-4 bg-white/5 backdrop-blur-sm">
+             Expertise & Innovation
+          </Badge>
+    
+          <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight">
+            Enterprise <span className="text-blue-500">AI Solutions</span>
+          </h1>
+    
+          <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+           From intelligent auditing to custom AI development—empowering 
+           businesses with cutting-edge artificial intelligence.
+          </p>
           </div>
         </section>
 
