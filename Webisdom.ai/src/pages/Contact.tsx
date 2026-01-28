@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, MapPin, Phone, Send, CheckCircle } from "lucide-react";
+import { Mail, MapPin, Phone, Send, CheckCircle, Sparkles } from "lucide-react"; // Added Sparkles for the badge
+import { Badge } from "@/components/ui/badge"; // Added Badge for consistency
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -32,7 +33,7 @@ const Contact = () => {
         const dateStr = now.toISOString().split('T')[0];
         const timeStr = now.toTimeString().split(' ')[0];
 
-        // 1. Keep Database Entry (Ye data ko Supabase table me save karega)
+        // 1. Keep Database Entry
         const confirmationId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
         const { error: insertError } = await supabase
           .from('form_submissions')
@@ -48,10 +49,9 @@ const Contact = () => {
 
         if (insertError) {
           console.error('Database insert error:', insertError);
-          // Database error hone par bhi hum email bhej sakte hain, isliye throw nahi kar rahe
         }
 
-        // 2. SMTP Email Sending (Ye apke Node.js server ko request bhejega)
+        // 2. SMTP Email Sending
         try {
           const response = await fetch("https://email-backend-snowy-five.vercel.app/api/send-email", {
             method: "POST",
@@ -63,8 +63,8 @@ const Contact = () => {
               email: formData.email,
               company: formData.company,
               message: formData.message,
-              type: formData.service, // Service ko 'type' banakar bhej rahe hain
-              phone: "Not provided in form" // Kyunki form me phone field nahi hai
+              type: formData.service,
+              phone: "Not provided in form"
             }),
           });
 
@@ -117,24 +117,29 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <Header />
-      <main className="pt-16">
-        {/* Hero Section */}
-        <section className="py-24 bg-gradient-to-br from-primary/10 to-accent/10">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-                Get in <span className="text-gradient">Touch</span>
-              </h1>
-              <p className="text-xl text-muted-foreground">
-                Ready to transform your business with AI? Let's discuss how we can help you achieve your goals.
-              </p>
-            </div>
+      <main>
+        {/* UPDATED HERO SECTION: Matches Dark CXO Aesthetic */}
+        <section className="pt-40 pb-24 bg-slate-950 text-white text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/30 via-slate-950 to-slate-950 -z-10"></div>
+          
+          <div className="relative z-10 container mx-auto px-4 max-w-4xl">
+            <Badge variant="outline" className="mb-6 border-white/20 text-blue-200 uppercase tracking-wider py-2 px-4 bg-white/5 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 mr-2 inline-block" /> Connect with us
+            </Badge>
+            
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight">
+              Get in <span className="text-blue-500">Touch</span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-gray-400 mb-10 leading-relaxed">
+              Ready to transform your business with AI? Let's discuss how we can help you achieve your goals.
+            </p>
           </div>
         </section>
 
-        {/* Contact Section */}
+        {/* Contact Section - Kept exactly the same */}
         <section className="py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
