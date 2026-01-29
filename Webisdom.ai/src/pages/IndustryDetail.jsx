@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { industries } from "@/data/industriesData"; 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -14,13 +14,23 @@ import {
 const IndustryDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
-  // Find industry and handle case sensitivity
-  const data = industries.find((item) => item.id.toLowerCase() === id?.toLowerCase());
+  // 1. Get the ID from either /industry/:id OR ?section=id
+  const currentId = id || searchParams.get("section");
+
+  // 2. FIND DATA
+  const data = industries.find((item) => item.id.toLowerCase() === currentId?.toLowerCase());
 
   useEffect(() => {
+    // 3. AUTOMATIC REDIRECT
+    // If the user arrived via ?section=fintech, move them to /industry/fintech
+    if (searchParams.get("section") && data) {
+      navigate(`/industry/${searchParams.get("section")}`, { replace: true });
+    }
+    
     window.scrollTo(0, 0);
-  }, [id]);
+  }, [currentId, data, navigate, searchParams]);
 
   if (!data) {
     return (
@@ -64,7 +74,7 @@ const IndustryDetail = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-slate-900 hover:bg-gray-100 rounded-full px-8 font-semibold" asChild>
                 <a href="#deep-dive">
-                   <ArrowDown className="mr-2 w-4 h-4"/> Technical Architecture
+                    <ArrowDown className="mr-2 w-4 h-4"/> Technical Architecture
                 </a>
               </Button>
               {data.url && (
@@ -234,7 +244,6 @@ const IndustryDetail = () => {
               {data.testimonials.map((testimonial, i) => (
                 <div key={i} className="relative bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-14 rounded-[2rem] shadow-2xl">
                   
-                  {/* FIXED: Removed Quote Icon and manual double quotes to clean up the UI */}
                   <blockquote className="text-xl md:text-3xl font-light leading-relaxed mb-10 italic relative z-10 text-center">
                     {testimonial.quote}
                   </blockquote>
