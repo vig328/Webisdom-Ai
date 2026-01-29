@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -34,7 +33,7 @@ const Industries = () => {
   }, []);
 
   const handleCardClick = (id) => {
-    console.log("Card Clicked! Navigating to:", `/industry/${id}`);
+    // Navigating to the clean URL structure
     navigate(`/industry/${id}`);
   };
 
@@ -56,28 +55,30 @@ const Industries = () => {
           {industryConfig.map((ind) => {
             const Icon = ind.icon;
             return (
-              <div 
+              <Card 
                 key={ind.id} 
                 onClick={() => handleCardClick(ind.id)}
-                className="block group cursor-pointer relative z-30"
+                className="group cursor-pointer hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-gray-100 bg-white overflow-hidden relative"
               >
-                <Card className="hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-gray-100 bg-white overflow-hidden pointer-events-none">
-                  {/* The pointer-events-none on the Card ensures the div above handles the click */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-transparent to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <CardHeader className="flex flex-row items-center gap-4 pb-2">
-                    <div className={`p-3.5 rounded-2xl ${ind.bg} transition-colors group-hover:bg-slate-900`}>
-                      <Icon className={`w-8 h-8 ${ind.color} group-hover:text-white transition-colors`} />
-                    </div>
-                    <CardTitle className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{ind.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-500 mb-6 text-sm leading-relaxed">{ind.desc}</p>
-                    <div className="flex items-center text-sm font-bold text-slate-900 opacity-60 group-hover:opacity-100 group-hover:text-blue-600 transition-all">
-                      View Solutions <ArrowRight className="ml-2 w-4 h-4" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                {/* Visual enhancements */}
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <CardHeader className="flex flex-row items-center gap-4 pb-2 relative z-10">
+                  <div className={`p-3.5 rounded-2xl ${ind.bg} transition-colors group-hover:bg-slate-900`}>
+                    <Icon className={`w-8 h-8 ${ind.color} group-hover:text-white transition-colors`} />
+                  </div>
+                  <CardTitle className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    {ind.title}
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent className="relative z-10">
+                  <p className="text-gray-500 mb-6 text-sm leading-relaxed">{ind.desc}</p>
+                  <div className="flex items-center text-sm font-bold text-slate-900 opacity-60 group-hover:opacity-100 group-hover:text-blue-600 transition-all">
+                    View Solutions <ArrowRight className="ml-2 w-4 h-4" />
+                  </div>
+                </CardContent>
+              </Card>
             );
           })}
         </div>
