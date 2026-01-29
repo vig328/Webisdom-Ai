@@ -65,34 +65,34 @@ const navigationData = {
     }
   ],
 
-  // 3. INDUSTRIES
+  // 3. INDUSTRIES - UPDATED TO POINT TO /industry/:id
   industries: [
     {
       category: "Service & Lifestyle",
       items: [
-        { name: "Hospitality", href: "/industries?section=hospitality" },
-        { name: "Healthcare", href: "/industries?section=healthcare" },
-        { name: "Education (EdTech)", href: "/industries?section=education" },
-        { name: "Coworking Spaces", href: "/industries?section=coworking" },
+        { name: "Hospitality", href: "/industry/hospitality" },
+        { name: "Healthcare", href: "/industry/healthcare" },
+        { name: "Education (EdTech)", href: "/industry/education" },
+        { name: "Coworking Spaces", href: "/industry/coworking" },
       ]
     },
     {
       category: "Finance & Professional",
       items: [
-        { name: "Fintech & Banking", href: "/industries?section=fintech" },
-        { name: "Revenue Management", href: "/industries?section=revenue" },
-        { name: "Real Estate", href: "/industries?section=real-estate" },
-        { name: "LegalTech", href: "/industries?section=legal" },
+        { name: "Fintech & Banking", href: "/industry/fintech" },
+        { name: "Revenue Management", href: "/industry/revenue" },
+        { name: "Real Estate", href: "/industry/real-estate" },
+        { name: "LegalTech", href: "/industry/legal" },
       ]
     },
     {
       category: "Industrial & Tech",
       items: [
-        { name: "Manufacturing 4.0", href: "/industries?section=manufacturing" },
-        { name: "Retail & E-commerce", href: "/industries?section=retail" },
-        { name: "Logistics", href: "/industries?section=logistics" },
-        { name: "AgriTech", href: "/industries?section=agriculture" },
-        { name: "Technology & SaaS", href: "/industries?section=tech" },
+        { name: "Manufacturing 4.0", href: "/industry/manufacturing" },
+        { name: "Retail & E-commerce", href: "/industry/retail" },
+        { name: "Logistics", href: "/industry/logistics" },
+        { name: "AgriTech", href: "/industry/agtech" },
+        { name: "Technology & SaaS", href: "/industry/tech" },
       ]
     }
   ]
@@ -138,7 +138,7 @@ const Header = () => {
               Home
             </Link>
 
-            {/* 1. PRODUCTS - Clickable with Hover Menu */}
+            {/* 1. PRODUCTS */}
             <div className="relative h-full flex items-center" onMouseEnter={() => handleMouseEnter('products')}>
               <Link
                 to="/products"
@@ -150,7 +150,7 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* 2. SERVICES - Clickable with Hover Menu */}
+            {/* 2. SERVICES */}
             <div className="relative h-full flex items-center" onMouseEnter={() => handleMouseEnter('services')}>
               <Link
                 to="/services"
@@ -162,7 +162,7 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* 3. INDUSTRIES - Clickable with Hover Menu */}
+            {/* 3. INDUSTRIES */}
             <div className="relative h-full flex items-center" onMouseEnter={() => handleMouseEnter('industries')}>
               <Link
                 to="/industries"
@@ -233,7 +233,6 @@ const Header = () => {
               ))}
             </div>
             
-            {/* View All Link */}
             <div className="mt-8 pt-4 border-t border-border flex justify-end">
                 <Link 
                   to={`/${activeMenu}`} 
@@ -254,7 +253,6 @@ const Header = () => {
             
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="block text-base font-medium text-foreground py-2 border-b border-border/50">Home</Link>
             
-            {/* Mobile - Main Category Links */}
             {['products', 'services', 'industries'].map((menuKey) => (
                <div key={menuKey} className="py-2 border-b border-border/50">
                   <Link 
